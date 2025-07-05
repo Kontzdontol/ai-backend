@@ -4,10 +4,14 @@ const bodyParser = require("body-parser");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 require('dotenv').config(); // ✅ Load .env
 
+// ✅ Debug ENV
+const API_KEY = process.env.API_KEY;
+console.log("✅ ENV API_KEY (TYPE):", typeof API_KEY);
+console.log("✅ ENV API_KEY (VALUE):", API_KEY);
+
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const API_URL = "https://api.bfl.ai/v1/flux-kontext-pro";
-const API_KEY = process.env.API_KEY; // ✅ Ambil dari .env
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '20mb' }));
