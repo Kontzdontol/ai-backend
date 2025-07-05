@@ -1,0 +1,15 @@
+# ⛔ JANGAN UPLOAD FILE INI KE GITHUB
+.env
+
+# 🧰 Folder node_modules berisi dependensi lokal
+node_modules/
+
+# 🧹 File sistem umum yang tidak perlu di-track
+.DS_Store
+Thumbs.db
+
+# 🗃 Log atau cache
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
