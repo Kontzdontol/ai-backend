@@ -2,26 +2,28 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-require('dotenv').config(); // ✅ Load environment variables
+require('dotenv').config(); // ✅ Load environment variables (lokal atau Railway)
+
+// === DEBUG: Tampilkan key environment yang tersedia ===
+console.log("✅ ENV Loaded Keys:", Object.keys(process.env)); // ⬅️ Tambahan
+const API_KEY = process.env.API_KEY;
+console.log("✅ ENV API_KEY (TYPE):", typeof API_KEY);
+console.log("✅ ENV API_KEY (VALUE):", API_KEY?.substring?.(0, 8) + "..." || "undefined");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const API_URL = "https://api.bfl.ai/v1/flux-kontext-pro";
-const API_KEY = process.env.API_KEY;
 
-// ✅ Debug: cek apakah API_KEY berhasil terbaca
-console.log("✅ ENV API_KEY (TYPE):", typeof API_KEY);
-console.log("✅ ENV API_KEY (VALUE):", API_KEY?.substring?.(0, 8) + "..." || "undefined");
-
+// === Middleware
 app.use(cors({
-  origin: "*", // 🔧 Bisa diganti dengan domain frontend seperti "https://namamu.vercel.app"
+  origin: "*", // 🔧 Ganti jika ingin batasi ke domain frontend kamu
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type", "x-key"]
 }));
 
 app.use(bodyParser.json({ limit: '20mb' }));
 
-// === IMAGE-BASED EDITING ONLY ===
+// === Endpoint: Generate Gambar ===
 app.post("/generate-image", async (req, res) => {
   const { prompt, input_image } = req.body;
 
@@ -60,7 +62,7 @@ app.post("/generate-image", async (req, res) => {
   }
 });
 
-// === POLLING HANDLER ===
+// === Endpoint: Polling Hasil
 app.get("/poll", async (req, res) => {
   const { url } = req.query;
 
@@ -88,7 +90,7 @@ app.get("/poll", async (req, res) => {
   }
 });
 
-// === START SERVER (on 0.0.0.0 for Railway) ===
+// === Start Server ===
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server berjalan di http://0.0.0.0:${PORT}`);
 });
